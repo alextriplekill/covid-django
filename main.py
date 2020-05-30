@@ -1,17 +1,29 @@
 import pandas as pd
 import webbrowser
+import requests
 import matplotlib.pyplot as plt
 import os
+import constants
 
 BASE_DIR = dir_path = os.path.dirname(os.path.realpath(__file__))
 BASE_NAME = "table.html"
-path_infected = os.path.join(BASE_DIR, 'graphData\\time_series_covid19_confirmed_global.csv')
-path_recovered = os.path.join(BASE_DIR, 'graphData\\time_series_covid19_recovered_global.csv')
-path_deaths = os.path.join(BASE_DIR, 'graphData\\time_series_covid19_deaths_global.csv')
+path_infected = os.path.join(BASE_DIR, 'graphData\\confirmed.csv')
+path_recovered = os.path.join(BASE_DIR, 'graphData\\recovered.csv')
+path_deaths = os.path.join(BASE_DIR, 'graphData\\deaths.csv')
 path_html = os.path.join(BASE_DIR, 'table.html')
 
+def updateData():
+    confirmed = requests.get(constants.TOTAL_CASES_URL)
+    with open(path_infected, 'wb') as f:
+        f.write(confirmed.content)
+    recovered = requests.get(constants.RECOVERED_URL)
+    with open(path_recovered, 'wb') as f:
+        f.write(recovered.content)
+    deaths = requests.get(constants.DEATHS_URL)
+    with open(path_deaths, 'wb') as f:
+        f.write(deaths.content)
 # Create your views here.
-
+updateData()
 arr_confirm = pd.read_csv(path_infected, sep=',', header=0)
 arr_confirm.drop(columns=['Lat','Long'], inplace=True)
 arr_confirm.fillna('', inplace=True)
