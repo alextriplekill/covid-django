@@ -1,0 +1,41 @@
+<head>
+	{% load static %}
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script type="text/javascript">
+	var jsonData = "{% static "data.json" %}";
+	</script>
+</head>
+<body>
+<script src="{% static 'index.js' %}"></script>
+	<div class="row"></div>
+	<div class="row">
+		<div class="col">
+			<table border="1px" class="table">
+				<tr>
+					{% for data in DataFrame %}
+						<th>{{ data }}</th>
+					{% endfor %}
+
+					{% for _, record in DataFrame.iterrows %}
+						<tr>
+							{% for value in record %}
+								<td>{{ value }}</td>
+							{% endfor %}
+						</tr>
+					{% endfor %}
+				</tr>
+			</table>
+		</div>
+		<div class="col"></div>
+		<div class="col"></div>
+	</div>
+	<div class="row"></div>
+	<div class="row"></div>
+</body>
