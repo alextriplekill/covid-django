@@ -1,3 +1,26 @@
+$.i18n({
+  locale: 'en'
+});
+$.i18n().load({
+  ru: 'static/ru.json',
+  en: 'static/ru.json',
+});
+
+$(document).ready(function () {
+  $.i18n().locale = 'ru';
+  $($('body > div > div > div > div > table > tbody')[0].children).each(function () {
+      let value = $(this)[0].children[0].textContent;
+      $(this)[0].children[0].textContent = $.i18n(value);
+      //console.log($(this)[0].children[0].textContent);
+  })
+
+  $('.dataframe').dataTable({
+      paging: true,
+      // scrollY: 600
+  });
+
+});
+
 console.log(jsonData);
 let json = $.getJSON(jsonData);
 console.log(json);
