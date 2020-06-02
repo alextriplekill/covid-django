@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import os
+import numpy as np
 
 from django.conf.global_settings import STATIC_URL
 
@@ -28,14 +29,15 @@ def get_data():
     update_data()
     arr_confirm = pd.read_csv(path_infected, sep=',', header=0)
     arr_confirm.drop(columns=['Lat','Long'], inplace=True)
-    arr_confirm.fillna('', inplace=True)
+
     arr_confirm["Infected"] = arr_confirm.iloc[:,-1]
-    arr_confirm['Location'] = arr_confirm['Country/Region'] + " " + arr_confirm['Province/State']
+    arr_confirm['Location'] = arr_confirm['Country/Region'] + " " + arr_confirm['Province/State'].replace(np.nan, " ")
     arr_confirm.drop(columns=['Country/Region','Province/State'], inplace=True)
     arr_confirm.drop(list(arr_confirm.filter(regex=r'(\d+/\d+/\d+)')), axis=1, inplace=True)
     arr_recover = pd.read_csv(path_recovered, sep=',', header=0)
     arr_recover.drop(columns=['Lat', 'Long', 'Province/State'], inplace=True)
-    arr_confirm["Recovered"] = arr_recover.iloc[:, -1].round()
+    arr_confirm["Recovered"] = arr_recover.iloc[:, -1]
+    arr_confirm["Recovered"] = arr_confirm["Recovered"].replace(np.nan, "No Data")
     arr_deaths = pd.read_csv(path_deaths, sep=',', header=0)
     arr_deaths.drop(columns=['Lat', 'Long', 'Province/State'], inplace=True)
     arr_confirm["Deaths"] = arr_deaths.iloc[:, -1]
